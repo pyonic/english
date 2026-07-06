@@ -23,11 +23,11 @@ import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136
 pdfjsLib.GlobalWorkerOptions.workerSrc =
     "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.min.mjs";
 
-const url = "https://staff.tiiame.uz/storage/users/247/books/iOHDNa3WCSJld2xD73oua0AFLsFsvHch58zd7TlV.pdf";
+const url = "./ew1.pdf";
 
 // Pages you want to display
-const firstPage = 5;
-const lastPage = 10;
+const firstPage = 10;
+const lastPage = 11;
 
 const pdf = await pdfjsLib.getDocument(url).promise;
 
