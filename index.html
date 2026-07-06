@@ -1,21 +1,107 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>PDF Page Range</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Viewer</title>
+
     <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
         canvas {
             display: block;
             margin: 20px auto;
             border: 1px solid #ccc;
+            box-shadow: 0 2px 8px rgba(0,0,0,.15);
+        }
+
+        /* Floating eye button */
+        .floating-eye {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.45);
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all .2s ease;
+        }
+
+        .floating-eye:hover {
+            background: rgba(0, 0, 0, 0.75);
+            transform: scale(1.05);
+        }
+
+        /* Modal overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.4);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal {
+            background: white;
+            width: min(700px, 90%);
+            max-height: 80vh;
+            overflow-y: auto;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.35);
+        }
+
+        .modal h2 {
+            margin-top: 0;
         }
     </style>
 </head>
+
 <body>
 
 <div id="pdf-container"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.min.mjs" type="module"></script>
+<!-- Floating Eye Button -->
+<button id="infoBtn" class="floating-eye">👁</button>
+
+<!-- Modal -->
+<div id="overlay" class="overlay">
+    <div id="modal" class="modal">
+        <dl class="vocabulary">
+            <dt>afraid</dt><dd>qo'rqmoq</dd>
+            <dt>agree</dt><dd>rozi bo'lmoq</dd>
+            <dt>angry</dt><dd>jahlda</dd>
+            <dt>arrive</dt><dd>yetib kelmoq</dd>
+            <dt>attack</dt><dd>hujum qilmoq</dd>
+            <dt>bottom</dt><dd>tagi osti</dd>
+            <dt>clever</dt><dd>aqlli</dd>
+            <dt>cruel</dt><dd>shafqatsiz</dd>
+            <dt>finally</dt><dd>nihoyat</dd>
+            <dt>hide</dt><dd>yashirmoq</dd>
+            <dt>hunt</dt><dd>ovlamoq</dd>
+            <dt>lot</dt><dd>ko'p</dd>
+            <dt>middle</dt><dd>o'rta</dd>
+            <dt>moment</dt><dd>lahza</dd>
+            <dt>pleased</dt><dd>mamnun</dd>
+            <dt>promise</dt><dd>va'da bermoq</dd>
+            <dt>reply</dt><dd>javob bermoq</dd>
+            <dt>safe</dt><dd>xavfsiz</dd>
+            <dt>trick</dt><dd>hiyla</dd>
+            <dt>well</dt><dd>yaxshi</dd>
+        </dl>
+    </div>
+</div>
 
 <script type="module">
 import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.min.mjs";
@@ -25,7 +111,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
 
 const url = "./ew1.pdf";
 
-// Pages you want to display
+// Pages to display
 const firstPage = 10;
 const lastPage = 11;
 
@@ -49,6 +135,23 @@ for (let pageNum = firstPage; pageNum <= lastPage; pageNum++) {
         viewport: viewport
     }).promise;
 }
+
+// Modal logic
+const infoBtn = document.getElementById("infoBtn");
+const overlay = document.getElementById("overlay");
+const modal = document.getElementById("modal");
+
+infoBtn.addEventListener("click", () => {
+    overlay.style.display = "flex";
+});
+
+overlay.addEventListener("click", () => {
+    overlay.style.display = "none";
+});
+
+modal.addEventListener("click", (e) => {
+    e.stopPropagation();
+});
 </script>
 
 </body>
