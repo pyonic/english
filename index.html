@@ -14,9 +14,9 @@
 
         canvas {
             display: block;
-            margin: 20px auto;
-            border: 1px solid #ccc;
-            box-shadow: 0 2px 8px rgba(0,0,0,.15);
+            width: 100%;
+            height: auto;
+            margin: 10px auto;
         }
 
         /* Floating eye button */
@@ -120,19 +120,27 @@ const pdf = await pdfjsLib.getDocument(url).promise;
 for (let pageNum = firstPage; pageNum <= lastPage; pageNum++) {
     const page = await pdf.getPage(pageNum);
 
-    const viewport = page.getViewport({ scale: 1.5 });
+    // Get the page at its original size
+    const viewport = page.getViewport({ scale: 1 });
+
+    // Calculate a scale that fits the phone screen
+    const containerWidth = window.innerWidth - 20; // 10px margin on each side
+    const scale = containerWidth / viewport.width;
+
+    // Create the scaled viewport
+    const scaledViewport = page.getViewport({ scale });
 
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
 
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
+    canvas.width = scaledViewport.width;
+    canvas.height = scaledViewport.height;
 
     document.getElementById("pdf-container").appendChild(canvas);
 
     await page.render({
         canvasContext: context,
-        viewport: viewport
+        viewport: scaledViewport
     }).promise;
 }
 
